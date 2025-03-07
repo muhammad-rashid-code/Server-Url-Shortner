@@ -40,7 +40,7 @@ url_route.post("/shorten", async (req, res) => {
       false,
       {
         originalUrl: newUrl.originalUrl,
-        shortenedUrl: `${req.protocol}://${req.get("host")}/${
+        shortenedUrl: `${req.protocol}://${req.get("host")}/url/${
           newUrl.shortenedUrl
         }`,
       },
