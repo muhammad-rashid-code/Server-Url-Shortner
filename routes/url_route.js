@@ -1,5 +1,5 @@
 import express from "express";
-import sendResponse from "../helpers/sendResponse";
+import sendResponse from "../helpers/sendResponse.js";
 
 const url_route = express();
 
