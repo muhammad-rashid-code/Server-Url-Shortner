@@ -11,7 +11,7 @@ const UrlSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       default: null,
-    }, // reference to a user if applicable
+    }, // reference to a user if applicablegit git
   },
   { timestamps: true }
 );

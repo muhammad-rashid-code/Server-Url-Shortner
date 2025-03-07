@@ -7,28 +7,17 @@ const url_route = express();
 // Middleware to parse JSON requests
 url_route.use(express.json());
 
-// Test route to check if the server is working
-url_route.get("/", (req, res) => {
-  sendResponse(
-    res,
-    200,
-    false,
-    "URL Route running 101",
-    "Helper function is running"
-  );
-});
-
 // POST route to create a shortened URL
 url_route.post("/shorten", async (req, res) => {
   try {
     const { originalUrl } = req.body;
 
-    // Check if the original URL is valid
+    // Validate original URL
     if (!originalUrl || !/^https?:\/\/.+$/.test(originalUrl)) {
       return sendResponse(res, 400, true, null, "Invalid URL");
     }
 
-    // Generate a unique short URL with the prefix ~myslug~
+    // Generate the shortened URL with the prefix
     let shortenedUrl = `myslug~${Math.random().toString(36).substring(2, 8)}`;
 
     // Check if the shortened URL already exists
@@ -37,7 +26,7 @@ url_route.post("/shorten", async (req, res) => {
       return sendResponse(res, 400, true, null, "Shortened URL already exists");
     }
 
-    // Create the new shortened URL record
+    // Save to the database
     const newUrl = new URI_Model({
       originalUrl,
       shortenedUrl,
@@ -63,12 +52,12 @@ url_route.post("/shorten", async (req, res) => {
   }
 });
 
-// GET route for accessing the shortened URL and redirecting to the original URL
+// GET route to redirect from shortened URL to original URL
 url_route.get("/:slug", async (req, res) => {
-  const slug = req.params.slug;
+  const slug = req.params.slug; // Get the slug from URL
 
   try {
-    // Find the record in the database using the shortened slug
+    // Find the original URL from the database
     const urlData = await URI_Model.findOne({ shortenedUrl: slug });
 
     if (!urlData) {
