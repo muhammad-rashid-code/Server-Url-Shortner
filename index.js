@@ -3,6 +3,7 @@ import "dotenv/config";
 import cors from "cors";
 import morgan from "morgan";
 import mongoose from "mongoose";
+import url_route from "./routes/url_route.js";
 
 const app = express();
 const { MONGO_URI, PORT } = process.env;
@@ -10,6 +11,7 @@ const { MONGO_URI, PORT } = process.env;
 app.use(express.json());
 app.use(morgan("common"));
 app.use(cors("*"));
+app.use("/url", url_route);
 
 mongoose
   .connect(MONGO_URI)
