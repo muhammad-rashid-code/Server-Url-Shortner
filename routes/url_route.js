@@ -14,5 +14,48 @@ url_route.get("/", (req, res) => {
     "Helper function is running"
   );
 });
+app.post("/shorten", async (req, res) => {
+  try {
+    const { originalUrl, customSlug } = req.body;
 
+    // Check if the original URL is valid
+    if (!originalUrl || !/^https?:\/\/.+$/.test(originalUrl)) {
+      return sendResponse(res, 400, true, null, "Invalid URL");
+    }
+
+    // Generate a unique short URL (you can implement your own short URL generator)
+    let shortenedUrl = customSlug || Math.random().toString(36).substring(2, 8); // simple random string generator
+
+    // Check if the shortened URL already exists
+    const existingUrl = await URI_Model.findOne({ shortenedUrl });
+    if (existingUrl) {
+      return sendResponse(res, 400, true, null, "Shortened URL already exists");
+    }
+
+    // Create the new shortened URL record
+    const newUrl = new URI_Model({
+      originalUrl,
+      shortenedUrl,
+      customSlug,
+    });
+
+    await newUrl.save();
+
+    sendResponse(
+      res,
+      201,
+      false,
+      {
+        originalUrl: newUrl.originalUrl,
+        shortenedUrl: `${req.protocol}://${req.get("host")}/${
+          newUrl.shortenedUrl
+        }`,
+      },
+      "Shortened URL created successfully"
+    );
+  } catch (error) {
+    console.error(error);
+    sendResponse(res, 500, true, null, "Internal server error");
+  }
+});
 export default url_route;
