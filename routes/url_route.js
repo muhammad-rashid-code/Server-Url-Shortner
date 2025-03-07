@@ -14,7 +14,7 @@ url_route.get("/", (req, res) => {
     "Helper function is running"
   );
 });
-app.post("/shorten", async (req, res) => {
+url_route.post("/shorten", async (req, res) => {
   try {
     const { originalUrl, customSlug } = req.body;
 
