@@ -73,11 +73,12 @@ url_route.get("/:slug", async (req, res) => {
 });
 
 // GET route to fetch all shortened URLs for history purposes
-url_route.get("/history", async (req, res) => {
+url_route.get("/red/history", async (req, res) => {
   try {
-    // Find all shortened URLs from the database
+    // Fetch all shortened URLs from the database
     const urlData = await URI_Model.find({});
 
+    // Check if no URLs exist in the database
     if (urlData.length === 0) {
       return sendResponse(res, 404, true, null, "No shortened URLs found");
     }
@@ -90,15 +91,17 @@ url_route.get("/history", async (req, res) => {
       {
         urls: urlData.map((item) => ({
           originalUrl: item.originalUrl,
-          shortenedUrl: `${req.protocol}://${req.get("host")}/redirect?slug=${
-            item.shortenedUrl
-          }`,
+          // Update the shortened URL path to avoid conflict with the redirect route
+          shortenedUrl: `${req.protocol}://${req.get(
+            "host"
+          )}/url/redirect?slug=${item.shortenedUrl}`,
         })),
       },
       "Successfully fetched all shortened URLs"
     );
   } catch (error) {
-    console.error(error);
+    // Catch any errors that occur during the database operation
+    console.error("Error fetching URLs:", error);
     sendResponse(res, 500, true, null, "Internal server error");
   }
 });
