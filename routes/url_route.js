@@ -18,7 +18,7 @@ url_route.post("/shorten", async (req, res) => {
     }
 
     // Generate the shortened URL with the prefix
-    let shortenedUrl = `myslug~${Math.random().toString(36).substring(2, 8)}`;
+    let shortenedUrl = `${Math.random().toString(36).substring(2, 8)}`;
 
     // Check if the shortened URL already exists
     const existingUrl = await URI_Model.findOne({ shortenedUrl });
