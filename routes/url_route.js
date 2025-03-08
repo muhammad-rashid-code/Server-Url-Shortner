@@ -52,20 +52,31 @@ url_route.post("/shorten", async (req, res) => {
   }
 });
 
-// GET route to redirect from shortened URL to original URL
-url_route.get("/:slug", async (req, res) => {
-  const slug = req.params.slug; // Get the slug from URL
-
+// GET route to fetch all shortened URLs for history purposes
+url_route.get("/history", async (req, res) => {
   try {
-    // Find the original URL from the database
-    const urlData = await URI_Model.findOne({ shortenedUrl: slug });
+    // Find all shortened URLs from the database
+    const urlData = await URI_Model.find({});
 
-    if (!urlData) {
-      return sendResponse(res, 404, true, null, "Shortened URL not found");
+    if (urlData.length === 0) {
+      return sendResponse(res, 404, true, null, "No shortened URLs found");
     }
 
-    // Redirect to the original URL
-    return res.redirect(urlData.originalUrl);
+    // Return the list of original URLs and their shortened versions
+    sendResponse(
+      res,
+      200,
+      false,
+      {
+        urls: urlData.map((item) => ({
+          originalUrl: item.originalUrl,
+          shortenedUrl: `${req.protocol}://${req.get("host")}/redirect?slug=${
+            item.shortenedUrl
+          }`,
+        })),
+      },
+      "Successfully fetched all shortened URLs"
+    );
   } catch (error) {
     console.error(error);
     sendResponse(res, 500, true, null, "Internal server error");
