@@ -46,18 +46,18 @@ Before you begin, ensure you have the following installed:
 
    ```env
    MONGO_URI=mongodb://localhost:27017/your-database-name
-   PORT=3000
+   PORT=4000
    ```
 
-   Replace `your-database-name` with your MongoDB database name and `3000` with your desired port.
+   Replace `your-database-name` with your MongoDB database name and `4000` with your desired port.
 
 4. **Start the server**:
 
    ```bash
-   npm start
+   npm run dev
    ```
 
-   The server will start running on the specified port (default: `3000`).
+   The server will start running on the specified port 4000.
 
 ---
 
