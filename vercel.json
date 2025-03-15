@@ -1,9 +1,26 @@
 {
   "version": 2,
-  "rewrites": [
+  "builds": [
     {
-      "source": "/(.*)",
-      "destination": "/"
+      "src": "index.js",
+      "use": "@vercel/node" 
+    }
+  ],
+  "routes": [
+    {
+      "src": "/shorten", 
+      "dest": "/index.js",
+      "methods": ["POST"]
+    },
+    {
+      "src": "/red/history", 
+      "dest": "/index.js",
+      "methods": ["GET"]
+    },
+    {
+      "src": "/(.*)", 
+      "dest": "/index.js",
+      "methods": ["GET"]
     }
   ]
 }
