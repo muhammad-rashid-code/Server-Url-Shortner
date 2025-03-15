@@ -13,7 +13,7 @@ app.use(morgan("common"));
 // app.options("*", cors()); // Handle preflight requests for all routes
 app.use(
   cors({
-    origin: "https://server-url-shortner.vercel.app/", // Allow requests from this origin
+    origin: ["https://server-url-shortner.vercel.app", "http://localhost:3000"], // Allow requests from these origins
     methods: ["GET", "POST"], // Allow only GET and POST requests
     allowedHeaders: ["Content-Type"], // Allow only specific headers
   })
