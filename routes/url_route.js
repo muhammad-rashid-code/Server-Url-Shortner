@@ -17,7 +17,7 @@ url_route.post("/shorten", async (req, res) => {
       return sendResponse(res, 400, true, null, "Invalid URL");
     }
 
-    // Generate the shortened URL with the prefix
+    // Generate the shortened URL slug
     let shortenedUrl = `${Math.random().toString(36).substring(2, 8)}`;
 
     // Check if the shortened URL already exists
@@ -40,9 +40,7 @@ url_route.post("/shorten", async (req, res) => {
       false,
       {
         originalUrl: newUrl.originalUrl,
-        shortenedUrl: `${req.protocol}://${req.get("host")}/url/${
-          newUrl.shortenedUrl
-        }`,
+        shortenedUrl: newUrl.shortenedUrl, // Return only the slug
       },
       "Shortened URL created successfully"
     );
@@ -91,10 +89,7 @@ url_route.get("/red/history", async (req, res) => {
       {
         urls: urlData.map((item) => ({
           originalUrl: item.originalUrl,
-          // Update the shortened URL path to avoid conflict with the redirect route
-          shortenedUrl: `${req.protocol}://${req.get(
-            "host"
-          )}/url/redirect?slug=${item.shortenedUrl}`,
+          shortenedUrl: item.shortenedUrl, // Return only the slug
         })),
       },
       "Successfully fetched all shortened URLs"
