@@ -59,7 +59,7 @@ app.use(morgan("common"));
 // );
 // app.options("*", cors());
 
-app.use(cors());
+app.use(cors("*"));
 app.use("/url", url_route);
 
 mongoose
