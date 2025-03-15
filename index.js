@@ -19,7 +19,7 @@ app.use(morgan("common"));
 //   })
 // );
 
-app.use(cors("*"));
+app.use(cors());
 app.use("/url", url_route);
 
 mongoose
