@@ -49,7 +49,7 @@ app.use(morgan("common"));
 //   })
 // );
 
-app.use(cors({ origin: "http://192.168.100.4:3000" }));
+app.use(cors({ origin: "http://localhost:3000" }));
 
 // app.use(cors());
 app.use("/url", url_route);
