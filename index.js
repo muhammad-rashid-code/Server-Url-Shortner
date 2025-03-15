@@ -57,6 +57,7 @@ app.use(
     credentials: true, // Allow credentials (if needed)
   })
 );
+app.options("*", cors());
 
 // app.use(cors());
 app.use("/url", url_route);
