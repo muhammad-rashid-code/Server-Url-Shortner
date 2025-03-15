@@ -52,26 +52,6 @@ url_route.post("/shorten", async (req, res) => {
   }
 });
 
-// GET route to redirect from shortened URL to original URL
-url_route.get("/:slug", async (req, res) => {
-  const slug = req.params.slug; // Get the slug from URL
-
-  try {
-    // Find the original URL from the database
-    const urlData = await URI_Model.findOne({ shortenedUrl: slug });
-
-    if (!urlData) {
-      return sendResponse(res, 404, true, null, "Shortened URL not found");
-    }
-
-    // Redirect to the original URL
-    return res.redirect(urlData.originalUrl);
-  } catch (error) {
-    console.error(error);
-    sendResponse(res, 500, true, null, "Internal server error");
-  }
-});
-
 // GET route to fetch all shortened URLs for history purposes
 url_route.get("/red/history", async (req, res) => {
   try {
@@ -91,10 +71,9 @@ url_route.get("/red/history", async (req, res) => {
       {
         urls: urlData.map((item) => ({
           originalUrl: item.originalUrl,
-          // Update the shortened URL path to avoid conflict with the redirect route
-          shortenedUrl: `${req.protocol}://${req.get(
-            "host"
-          )}/url/redirect?slug=${item.shortenedUrl}`,
+          shortenedUrl: `${req.protocol}://${req.get("host")}/url/${
+            item.shortenedUrl
+          }`,
         })),
       },
       "Successfully fetched all shortened URLs"
@@ -102,6 +81,26 @@ url_route.get("/red/history", async (req, res) => {
   } catch (error) {
     // Catch any errors that occur during the database operation
     console.error("Error fetching URLs:", error);
+    sendResponse(res, 500, true, null, "Internal server error");
+  }
+});
+
+// GET route to redirect from shortened URL to original URL
+url_route.get("/:slug", async (req, res) => {
+  const slug = req.params.slug; // Get the slug from URL
+
+  try {
+    // Find the original URL from the database
+    const urlData = await URI_Model.findOne({ shortenedUrl: slug });
+
+    if (!urlData) {
+      return sendResponse(res, 404, true, null, "Shortened URL not found");
+    }
+
+    // Redirect to the original URL
+    return res.redirect(urlData.originalUrl);
+  } catch (error) {
+    console.error(error);
     sendResponse(res, 500, true, null, "Internal server error");
   }
 });

@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(morgan("common"));
 app.options("*", cors()); // Handle preflight requests for all routes
 app.use("/url", url_route);
-
+ 
 mongoose
   .connect(MONGO_URI)
   .then(() => {
