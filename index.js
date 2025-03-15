@@ -49,17 +49,17 @@ app.use(morgan("common"));
 //   })
 // );
 
-app.use(
-  cors({
-    origin: "http://localhost:3000", // Allow only this origin
-    methods: ["GET", "POST", "OPTIONS"], // Allow GET, POST, and OPTIONS (for preflight)
-    allowedHeaders: ["Content-Type"], // Allow only specific headers
-    credentials: true, // Allow credentials (if needed)
-  })
-);
-app.options("*", cors());
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000", // Allow only this origin
+//     methods: ["GET", "POST", "OPTIONS"], // Allow GET, POST, and OPTIONS (for preflight)
+//     allowedHeaders: ["Content-Type"], // Allow only specific headers
+//     credentials: true, // Allow credentials (if needed)
+//   })
+// );
+// app.options("*", cors());
 
-// app.use(cors());
+app.use(cors());
 app.use("/url", url_route);
 
 mongoose
