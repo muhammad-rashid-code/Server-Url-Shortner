@@ -10,7 +10,7 @@ const { MONGO_URI, PORT } = process.env;
 
 app.use(express.json());
 app.use(morgan("common"));
-// app.options("*", cors()); // Handle preflight requests for all routes
+app.options("*", cors()); // Handle preflight requests for all routes
 // app.use(
 //   cors({
 //     origin: [
@@ -59,7 +59,7 @@ app.use(morgan("common"));
 // );
 // app.options("*", cors());
 
-app.use(cors("*"));
+// app.use(cors("*"));
 app.use("/url", url_route);
 
 mongoose
