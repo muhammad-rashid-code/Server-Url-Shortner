@@ -17,8 +17,9 @@ app.use(
       "http://localhost:3000",
       "https://client-url-shortner-two.vercel.app",
     ], // Allow requests from these origins
-    methods: ["GET", "POST"], // Allow only GET and POST requests
+    methods: ["GET", "POST", "OPTIONS"], // Allow GET, POST, and OPTIONS (for preflight)
     allowedHeaders: ["Content-Type"], // Allow only specific headers
+    credentials: true, // Allow credentials (if needed)
   })
 );
 
