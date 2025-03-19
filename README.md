@@ -163,6 +163,12 @@ your-repo-name/
 - **Port**: Change the `PORT` in the `.env` file to use a different port.
 
 ---
+## Error Learnig
+
+- **On First Deployement **: Server get crashed why i don't know.
+![image](https://github.com/user-attachments/assets/8718eb2c-6e8e-4f66-94f2-720b7978bb02)
+
+---
 
 ## Contributing
 
