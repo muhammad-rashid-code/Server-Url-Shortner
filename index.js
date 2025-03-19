@@ -13,12 +13,14 @@ const { PORT, MONGO_URI } = process.env;
 // Connect to MongoDB
 mongoose
   .connect(MONGO_URI)
-  .then(() => console.log("======Connected to MongoDB======="))
+  .then(() => console.log("Connected to MongoDB"))
   .catch((error) => console.error("Error connecting to MongoDB:", error));
 
+// CORS configuration
 const whiteList = [
   "https://client-url-shortner-two.vercel.app",
-  "http://192.168.100.4:3000",
+  "http://localhost:3000",
+  "http://localhost:4000",
 ];
 
 const corsOption = {
@@ -31,23 +33,22 @@ const corsOption = {
   },
 };
 
+// Middleware
 app.use(express.json());
 app.use(cors(corsOption));
 app.use(morgan("common"));
 
+// Utility function to generate a short URL
 const generateShortUrl = (length = 6) => {
   return crypto.randomBytes(length).toString("hex").slice(0, length);
 };
 
-app.get("/", (req, res) => {
-  sendResponse(res, 200, false, null, "Server is Good");
-});
-
-// Create a new shortened URL
+// Endpoint to create a new shortened URL
 app.post("/shorten", async (req, res) => {
   try {
     const { originalUrl } = req.body;
 
+    // Validate input
     if (!originalUrl) {
       return sendResponse(res, 400, "Original URL is required", null, null);
     }
@@ -76,14 +77,16 @@ app.post("/shorten", async (req, res) => {
       );
     }
 
+    // Generate a new short URL
     const shortUrl = generateShortUrl();
 
-    // Check if the short URL already exists, and handle conflicts
+    // Check for short URL collisions
     let existingShortUrl = await Url.findOne({ shortUrl });
     if (existingShortUrl) {
       throw new Error("Short URL collision detected");
     }
 
+    // Save the new URL to the database
     const newUrl = new Url({
       originalUrl,
       shortUrl,
@@ -107,17 +110,19 @@ app.post("/shorten", async (req, res) => {
   }
 });
 
-// Redirect to the original URL using the short URL
+// Endpoint to redirect to the original URL
 app.get("/:shortUrl", async (req, res) => {
   try {
     const { shortUrl } = req.params;
 
+    // Find the URL document in the database
     const urlData = await Url.findOne({ shortUrl });
 
     if (!urlData) {
       return sendResponse(res, 404, "Short URL not found", null, null);
     }
 
+    // Redirect to the original URL
     return res.redirect(urlData.originalUrl);
   } catch (error) {
     console.error("Error while redirecting:", error.message);
@@ -125,13 +130,13 @@ app.get("/:shortUrl", async (req, res) => {
   }
 });
 
-// Endpoint to get all stored URLs
+// Endpoint to fetch all URLs
 app.get("/all-urls", async (req, res) => {
   try {
     const allUrls = await Url.find();
 
     if (allUrls.length === 0) {
-      return sendResponse(res, 404, "No URLs found", null, null);
+      return sendResponse(res, 200, null, [], "No URLs found");
     }
 
     return sendResponse(
@@ -149,9 +154,5 @@ app.get("/all-urls", async (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-  try {
-    console.log(`Server is running at PORT ${PORT}`);
-  } catch (error) {
-    console.error("Error while starting the server:", error.message);
-  }
+  console.log(`Server is running at PORT ${PORT}`);
 });
