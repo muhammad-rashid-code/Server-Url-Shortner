@@ -17,11 +17,7 @@ mongoose
   .catch((error) => console.error("Error connecting to MongoDB:", error));
 
 // CORS configuration
-const whiteList = [
-  "https://client-url-shortner-two.vercel.app",
-  "http://localhost:3000",
-  "http://localhost:4000",
-];
+const whiteList = ["http://192.168.100.4:3000", "http://localhost:4000"];
 
 const corsOption = {
   origin: (origin, callback) => {
@@ -131,10 +127,11 @@ app.get("/:shortUrl", async (req, res) => {
 });
 
 // Endpoint to fetch all URLs
-app.get("/all-urls", async (req, res) => {
+// Server: index.js
+app.get("/urls/all-urls", async (req, res) => {
   try {
     const allUrls = await Url.find();
-
+ 
     if (allUrls.length === 0) {
       return sendResponse(res, 200, null, [], "No URLs found");
     }
