@@ -1,21 +1,21 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 
-const UrlSchema = new Schema(
+const urlSchema = new mongoose.Schema(
   {
-    originalUrl: { type: String, required: true },
-    shortenedUrl: { type: String, required: true, unique: true },
-    customSlug: { type: String, unique: true, sparse: true }, // optional custom slug
-    expiresAt: { type: Date, default: null }, // optional expiration date
-    clicks: { type: Number, default: 0 }, // analytics: how many times the URL has been clicked
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      default: null,
-    }, // reference to a user if applicablegit git
+    originalUrl: {
+      type: String,
+      required: true,
+      unique: true, // Ensure that each original URL is unique
+    },
+    shortUrl: {
+      type: String,
+      required: true,
+      unique: true, // Ensure that each shortened URL is unique
+    },
   },
   { timestamps: true }
 );
 
-const URI_Model = mongoose.model("Url", UrlSchema);
+const Url = mongoose.model("Url", urlSchema);
 
-export default URI_Model;
+export default Url;
