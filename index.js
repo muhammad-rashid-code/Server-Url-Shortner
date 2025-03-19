@@ -19,7 +19,6 @@ mongoose
 const whiteList = [
   "https://client-url-shortner-two.vercel.app",
   "http://localhost:3000",
-  "http://localhost:4000",
 ];
 
 const corsOption = {
