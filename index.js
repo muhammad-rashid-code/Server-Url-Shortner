@@ -17,7 +17,7 @@ mongoose
   .catch((error) => console.error("Error connecting to MongoDB:", error));
 
 // CORS configuration
-const whiteList = ["http://192.168.100.4:3000", "http://localhost:4000"];
+const whiteList = ["http://192.168.100.4:3000", "https://client-url-shortner-xi.vercel.app/"];
 
 const corsOption = {
   origin: (origin, callback) => {
