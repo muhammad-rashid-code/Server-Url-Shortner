@@ -40,6 +40,10 @@ const generateShortUrl = (length = 6) => {
   return crypto.randomBytes(length).toString("hex").slice(0, length);
 };
 
+app.get("/", (req, res) => {
+  sendResponse(res, 200, false, null, "Server is Good");
+});
+
 // Create a new shortened URL
 app.post("/shorten", async (req, res) => {
   try {
